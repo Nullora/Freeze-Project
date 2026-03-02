@@ -85,6 +85,61 @@ void erase_last_char(){
     }
 }
 
+// ===== RTC TIME (REAL DATE) =====
+
+// read CMOS register
+unsigned char cmos_read(unsigned char reg){
+    outb(0x70, reg);
+    return inb(0x71);
+}
+
+// convert BCD -> binary
+int bcd_to_bin(unsigned char val){
+    return (val & 0x0F) + ((val / 16) * 10);
+}
+
+// read time from RTC
+void read_rtc(int* sec,int* min,int* hour,int* day,int* mon,int* year){
+    *sec  = bcd_to_bin(cmos_read(0x00));
+    *min  = bcd_to_bin(cmos_read(0x02));
+    *hour = bcd_to_bin(cmos_read(0x04));
+    *day  = bcd_to_bin(cmos_read(0x07));
+    *mon  = bcd_to_bin(cmos_read(0x08));
+    *year = bcd_to_bin(cmos_read(0x09)) + 2000;
+}
+
+// print integer
+void print_int(int v){
+    char buf[16];
+    int i = 0;
+
+    if(v == 0){
+        putc('0');
+        return;
+    }
+
+    while(v > 0){
+        buf[i++] = '0' + (v % 10);
+        v /= 10;
+    }
+
+    for(int j = i - 1; j >= 0; j--){
+        putc(buf[j]);
+    }
+}
+
+// print 2 digits (for time)
+void print_2digit(int v){
+    if(v < 10) putc('0');
+    print_int(v);
+}
+
+// month names
+const char* months[] = {
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
+};
+
 // SERIAL input-aware reader
 void get_input(char* buffer){
     int i = 0;
@@ -170,7 +225,33 @@ void handle_command(char *buf){
     } else if(strcmp(buf,"uptime")==1){
         print("05:00:00 up 12 days, 3:45, 1 user, load average: 0.15, 0.10, 0.08\n");
     } else if(strcmp(buf,"date")==1){
-        print("Wed Feb 26 05:00:00 UTC 2026\n");
+        int sec,min,hour,day,mon,year;
+
+        read_rtc(&sec,&min,&hour,&day,&mon,&year);
+
+    // basic validation (prevents crashes if RTC gives bad values)
+        if(mon < 1 || mon > 12){
+            print("RTC error\n");
+            return;
+        }
+
+        print(months[mon-1]);
+        putc(' ');
+
+        print_int(day);
+        putc(' ');
+
+        print_int(year);
+        putc(' ');
+
+        print_2digit(hour);
+        putc(':');
+        print_2digit(min);
+        putc(':');
+        print_2digit(sec);
+
+        print(" UTC\n");
+            print("Wed Feb 26 05:00:00 UTC 2026\n");
     } else if(strcmp(buf,"id")==1){
         print("uid=0(root) gid=0(root) groups=0(root),4(adm),27(sudo)\n");
     } else if(strcmp(buf,"who")==1){
@@ -341,7 +422,7 @@ void handle_command(char *buf){
 void shell(){
     char buf[128];
     while(1){
-        print("> ");
+        print("$ ");
         get_input(buf);
         if(startswith(buf,"sudo ")){
             print("[sudo] ");
