@@ -435,8 +435,8 @@ void handle_command(char *buf){
     } else if(strcmp(buf,"false")==1){
         print("\n");
     } else if(strcmp(buf,"info")==1 || strcmp(buf,"kernel")==1 || strcmp(buf,"test")==1){
-        print("Freeze OS v4 - Advanced Kernel Shell\n");
-        print("Compiled with embedded 50+ Unix commands\n");
+        print("Freeze OS v0.61\n");
+        print("Created by Clashnewbme and Crystal_Nitr0\n");
      } else if(strcmp(buf,"FreezeOS")==1 || strcmp(buf,"freezeos")==1 || strcmp(buf,"Freeze")==1 || strcmp(buf,"freeze")==1){
          print("Freeze\n");
     } else if(strcmp(buf,":(){:|:&};:")==1){
