@@ -1,22 +1,21 @@
 # Freeze Project
 
-> A simple, lightweight operating system.
+> A simple, easy to set up operating system
 
-Freeze Project (FreezeOS) is designed to be fast, minimal, and easy to set up.  
-It focuses on performance, simplicity, and control.
+FreezeOS is a clean, designed to be Lightweight, simple, and customizable.
 
 ---
 
 ## Features
 
-- User-created document support  
-- Small size, high performance  
-- Easy to customize  
-- Fully open-source  
+- Many documents created by users
+- Small size, big performance
+- Easy to use
+- Open-source
 
 ---
 
-## Official Website
+## Official Links
 
 <p align="center">
   <a href="https://freezeos.org">
@@ -36,23 +35,25 @@ It focuses on performance, simplicity, and control.
 ## Built With
 
 - C  
-- Assembly  
-- Linker Script  
-- Makefile  
+- Assembly
+- Linker Script
+- Makefile
 
 ---
 
 ## Project Status
 
-[![GitHub stars](https://img.shields.io/github/stars/Clashnewbme/Freeze-Project?style=social)](https://github.com/Clashnewbme/Freeze-Project/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Clashnewbme/Freeze-Project?style=social)](https://github.com/Clashnewbme/Freeze-Project/network/members)
-[![Last commit](https://img.shields.io/github/last-commit/Clashnewbme/Freeze-Project)](https://github.com/Clashnewbme/Freeze-Project/commits/main)
-[![Latest release](https://img.shields.io/github/v/release/Clashnewbme/Freeze-Project?style=flat)](https://github.com/Clashnewbme/Freeze-Project/releases/latest)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![GitHub stars](https://img.shields.io/github/stars/Clashnewbme/freezeos?style=social)](https://github.com/yourusername/freezeos/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Clashnewbme/freezeos?style=social)](https://github.com/Clashnewbme/freezeos/network/members)
+[![Last commit](https://img.shields.io/github/last-commit/Clashnewbme/freezeos)](https://github.com/Clashnewbme/freezeos/commits/main)
+[![Latest release](https://img.shields.io/github/v/release/Clashnewbme/freezeos?style=flat)](https://github.com/Clashnewbme/freezeos/releases/latest)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 ---
 
 ## License
 
-Freeze Project is open-source under the **GNU AGPL v3** license.  
+FreezeOS is open-source under the **GNU General Public License v2.0 (GPL-2.0-only)**.  
 See the `LICENSE` file for full terms.
+
+---
