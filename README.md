@@ -49,6 +49,7 @@ FreezeOS is a clean, designed to be Lightweight, simple, and customizable.
 [![Last commit](https://img.shields.io/github/last-commit/Clashnewbme/Freeze-Project)](https://github.com/Clashnewbme/Freeze-Project/commits/main)
 [![Latest release](https://img.shields.io/github/v/release/Clashnewbme/Freeze-Project?style=flat)](https://github.com/Clashnewbme/Freeze-Project/releases/latest)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Discord](https://img.shields.io/discord/830522505605283862.svg?logo=discord&logoColor=white&logoWidth=20&labelColor=7289DA&label=Discord&color=17cf48)](https://discord.com/invite/fr5fUpa65e)
 
 ---
 
