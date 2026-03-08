@@ -1,4 +1,43 @@
+# Freeze Project
 
-Freeze Project
+> A simple, easy to set up operating system
 
-Check our website for documentation on how to set up.
+FreezeOS is a clean, designed to be Lightweight, simple, and customizable.
+
+---
+
+## Official Links
+
+<p align="center">
+  <a href="https://freezeos.org">
+    <img src="https://img.shields.io/badge/Website-freezeos.org-blue?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website" />
+  </a>
+</p>
+
+---
+
+## Documentation
+
+- [Full Documentation](https://freezeos.org/documentation.html)  
+- [Latest Release](https://freezeos.org/version0615.html)  
+
+---
+
+## Built With
+
+- C  
+- Assembly
+- Linker Script
+- Makefile
+- Shell
+
+---
+
+## Project Status
+
+[![GitHub stars](https://img.shields.io/github/stars/Clashnewbme/Freeze-Project?style=social)](https://github.com/Clashnewbme/Freeze-Project/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Clashnewbme/Freeze-Project?style=social)](https://github.com/Clashnewbme/Freeze-Project/network/members)
+[![Last commit](https://img.shields.io/github/last-commit/Clashnewbme/Freeze-Project)](https://github.com/Clashnewbme/Freeze-Project/commits/main)
+[![Latest release](https://img.shields.io/github/v/release/Clashnewbme/Freeze-Project?style=flat)](https://github.com/Clashnewbme/Freeze-Project/releases/latest)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Discord](https://img.shields.io/discord/830522505605283862.svg?logo=discord&logoColor=white&logoWidth=20&labelColor=7289DA&label=Discord&color=17cf48)](https://discord.com/invite/fr5fUpa65e)
