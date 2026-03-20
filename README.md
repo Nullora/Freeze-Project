@@ -12,8 +12,9 @@ FreezeOS is a clean, designed to be Lightweight, simple, and customizable.
 - Small size, big performance
 - Easy to use
 - Open-source
+- Guntenberg Library
 
-<img width="314" height="277" alt="Image" src="https://github.com/user-attachments/assets/09715275-117b-4ca8-944a-b272f2e762ce" />
+<img width="1028" height="487" alt="Image" src="https://github.com/user-attachments/assets/feba4a1c-7d98-407c-a7ba-0dea347f503e" />
 
 ---
 
