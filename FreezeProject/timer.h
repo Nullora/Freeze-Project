@@ -5,5 +5,5 @@
 
 extern volatile uint32_t ticks;
 extern volatile uint32_t idle_ticks;
-
+void timer_callback();
 #endif

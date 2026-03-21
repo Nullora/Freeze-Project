@@ -1,5 +1,5 @@
 /* Simple 16550 UART serial driver for debug output */
-#include <stdint.h>
+#include "serial.h"
 
 #define SERIAL_PORT 0x3F8
 
