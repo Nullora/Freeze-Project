@@ -1,4 +1,6 @@
 #include "rtc.h"
+#include "input.h"
+#include "vga.h"
 unsigned char cmos_read(unsigned char reg){
     outb(0x70, reg);
     return inb(0x71);

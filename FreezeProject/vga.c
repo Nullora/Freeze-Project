@@ -1,4 +1,8 @@
 #include "vga.h"
+#include "serial.h"
+volatile uint16_t* vga = (uint16_t*)0xB8000;
+int row = 0, col = 0;
+uint8_t color = 0x02;
 void putc(char c){
     if(c=='\n'){
         row++;

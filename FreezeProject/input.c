@@ -1,4 +1,6 @@
 #include "input.h"
+#include "serial.h"
+#include "vga.h"
 
 char scancode_to_ascii(unsigned char sc){
     char map[128] = {
@@ -37,6 +39,6 @@ unsigned char inb(unsigned short port){
     __asm__ volatile ("inb %1, %0" : "=a"(ret) : "Nd"(port));
     return ret;
 }
-static inline void outb(unsigned short port, unsigned char val){
+void outb(unsigned short port, unsigned char val){
     __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }

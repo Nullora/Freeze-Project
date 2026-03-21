@@ -1,5 +1,7 @@
 #include "shell.h"
 #include "rtc.h"
+#include "input.h"
+#include "vga.h"
 int startswith(const char* s,const char* p){ int i=0; while(p[i]){ if(s[i]!=p[i]) return 0; i++; } return 1; }
 int strcmp(const char* a,const char* b){
     int i=0;
