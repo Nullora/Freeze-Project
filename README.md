@@ -41,13 +41,10 @@
 
 ---
 
-## Built With
+## To run
 
-- C  
-- Assembly
-- Linker Script
-- Makefile
-- Shell
+> make
+> FreezeProject/build/kernel.bin && make run
 
 ---
 
