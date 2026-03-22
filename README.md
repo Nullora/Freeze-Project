@@ -39,7 +39,7 @@ Created by Clashnewbme, and volunteers.
 ## To make files
 
 ```bash
-make FreezeProject/build/kernel.bin && make run
+make && make run
 ```
 
 ---
