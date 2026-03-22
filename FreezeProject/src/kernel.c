@@ -20,7 +20,7 @@ void kernel_main(void){
     print("\033[92mhttps://freezeos.org/\033[0m\n");
     print("\033[93mType 'help' for help on learning commands\033[0m\n\n");
     print("\033[94m--------------------------------\033[0m\n");
-    print("\033[92mCurrently: \033[93mVersion 0.62\033[0m\n");
+    print("\033[92mCurrently: \033[93mVersion 0.64\033[0m\n");
 
     shell();
 }
