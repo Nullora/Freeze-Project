@@ -16,8 +16,7 @@ sudo apt install build-essential grub-pc-bin grub-common xorriso qemu-system-x86
 ## 2. Build the Project
 From the root of the repo:
 ```bash
-make clean
-make
+make && make run
 ```
 
 if you want you may check for the iso file:
