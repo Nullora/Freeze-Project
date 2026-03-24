@@ -46,13 +46,14 @@ uint8_t e1000_bus = 0xFF;
 uint8_t e1000_slot = 0xFF;
 volatile uint32_t* e1000_mmio = 0;
 
-#define E1000_REG_CTRL  0x0000
-#define E1000_REG_RCTL  0x0100
-#define E1000_REG_RDBAL 0x2800
-#define E1000_REG_RDBAH 0x2804
-#define E1000_REG_RDLEN 0x2808
-#define E1000_REG_RDH   0x2810
-#define E1000_REG_RDT   0x2818
+#define E1000_REG_CTRL   0x0000
+#define E1000_REG_STATUS 0x0008
+#define E1000_REG_RCTL   0x0100
+#define E1000_REG_RDBAL  0x2800
+#define E1000_REG_RDBAH  0x2804
+#define E1000_REG_RDLEN  0x2808
+#define E1000_REG_RDH    0x2810
+#define E1000_REG_RDT    0x2818
 
 #define E1000_NUM_RX_DESC 32
 #define E1000_RX_BUFFER_SIZE 2048
@@ -73,6 +74,11 @@ int rx_index = 0;
 
 void e1000_write(uint32_t reg, uint32_t val) {
     e1000_mmio[reg / 4] = val;
+}
+
+int e1000_link_up() {
+    uint32_t status = e1000_mmio[E1000_REG_STATUS / 4];
+    return (status & (1 << 1)) != 0;
 }
 
 
@@ -129,6 +135,12 @@ void e1000_init() {
     print("[NET] Reset done\n");
 
     e1000_rx_init();
+
+    if (e1000_link_up()) {
+        print("[NET] Cable connected\n");
+    } else {
+        print("[NET] No cable\n");
+    }
 }
 
 void pci_scan() {
