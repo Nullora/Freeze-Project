@@ -13,7 +13,6 @@ const unsigned int multiboot_header[] = {
 #include "shell.h"
 #include <stdint.h>
 
-void print_hex(uint32_t val);
 
 static inline void outl(uint16_t port, uint32_t val) {
     __asm__ volatile ("outl %0, %1" : : "a"(val), "Nd"(port));
@@ -25,18 +24,112 @@ static inline uint32_t inl(uint16_t port) {
     return ret;
 }
 
+
 uint32_t pci_read(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
     uint32_t address = (uint32_t)((bus << 16) | (slot << 11) |
                                  (func << 8) | (offset & 0xFC) |
-                                 ((uint32_t)0x80000000));
-
+                                 0x80000000);
     outl(0xCF8, address);
     return inl(0xCFC);
 }
 
-/* Store e1000 location */
+void pci_write(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t value) {
+    uint32_t address = (uint32_t)((bus << 16) | (slot << 11) |
+                                 (func << 8) | (offset & 0xFC) |
+                                 0x80000000);
+    outl(0xCF8, address);
+    outl(0xCFC, value);
+}
+
+
 uint8_t e1000_bus = 0xFF;
 uint8_t e1000_slot = 0xFF;
+volatile uint32_t* e1000_mmio = 0;
+
+#define E1000_REG_CTRL  0x0000
+#define E1000_REG_RCTL  0x0100
+#define E1000_REG_RDBAL 0x2800
+#define E1000_REG_RDBAH 0x2804
+#define E1000_REG_RDLEN 0x2808
+#define E1000_REG_RDH   0x2810
+#define E1000_REG_RDT   0x2818
+
+#define E1000_NUM_RX_DESC 32
+#define E1000_RX_BUFFER_SIZE 2048
+
+struct e1000_rx_desc {
+    uint64_t addr;
+    uint16_t length;
+    uint16_t checksum;
+    uint8_t status;
+    uint8_t errors;
+    uint16_t special;
+};
+
+struct e1000_rx_desc rx_descs[E1000_NUM_RX_DESC];
+uint8_t rx_buffers[E1000_NUM_RX_DESC][E1000_RX_BUFFER_SIZE];
+
+int rx_index = 0;
+
+void e1000_write(uint32_t reg, uint32_t val) {
+    e1000_mmio[reg / 4] = val;
+}
+
+
+void e1000_rx_init() {
+    print("[NET] Setting up RX...\n");
+
+    for (int i = 0; i < E1000_NUM_RX_DESC; i++) {
+        rx_descs[i].addr = (uint64_t)&rx_buffers[i];
+        rx_descs[i].status = 0;
+    }
+
+    e1000_write(E1000_REG_RDBAL, (uint32_t)&rx_descs);
+    e1000_write(E1000_REG_RDBAH, 0);
+    e1000_write(E1000_REG_RDLEN, E1000_NUM_RX_DESC * sizeof(struct e1000_rx_desc));
+
+    e1000_write(E1000_REG_RDH, 0);
+    e1000_write(E1000_REG_RDT, E1000_NUM_RX_DESC - 1);
+
+    uint32_t rctl = (1 << 1) | (1 << 15);
+    e1000_write(E1000_REG_RCTL, rctl);
+
+    print("[NET] RX initialized\n");
+}
+
+void e1000_poll() {
+    struct e1000_rx_desc* desc = &rx_descs[rx_index];
+
+    if (desc->status & 0x1) {
+        print("[NET] Packet received! Len=");
+        print_hex(desc->length);
+        print("\n");
+
+        desc->status = 0;
+        e1000_write(E1000_REG_RDT, rx_index);
+
+        rx_index = (rx_index + 1) % E1000_NUM_RX_DESC;
+    }
+}
+
+void e1000_init() {
+    print("\n[NET] Initializing e1000...\n");
+
+    uint32_t cmd = pci_read(e1000_bus, e1000_slot, 0, 0x04);
+    cmd |= (1 << 2) | (1 << 1);
+    pci_write(e1000_bus, e1000_slot, 0, 0x04, cmd);
+
+    uint32_t bar0 = pci_read(e1000_bus, e1000_slot, 0, 0x10);
+    e1000_mmio = (volatile uint32_t*)(bar0 & 0xFFFFFFF0);
+
+    e1000_write(E1000_REG_CTRL, (1 << 26));
+
+    for (volatile int i = 0; i < 100000; i++);
+
+    print("[NET] Reset done\n");
+
+    e1000_rx_init();
+}
 
 void pci_scan() {
     print("\n[PCI] Scanning...\n");
@@ -70,19 +163,17 @@ void pci_scan() {
         }
     }
 
-    if (e1000_bus == 0xFF) {
-        print("\n[NET] No e1000 found.\n");
-    } else {
-        print("\n[NET] e1000 ready at ");
-        print_hex(e1000_bus);
-        print(":");
-        print_hex(e1000_slot);
-        print("\n");
+    if (e1000_bus != 0xFF) {
+        print("\n[NET] e1000 ready\n");
+        e1000_init();
     }
 }
-// Entry
+
+// ENTRY 
 void kernel_main(void){
     clear();
+
+    pci_scan();   
 
     print("___________                                    \n");
     print("\\_   _____/______   ____   ____ ________ ____  \n");
@@ -90,13 +181,12 @@ void kernel_main(void){
     print(" |     \\   |  | \\/\\  ___/\\  ___/ /    /\\  ___/ \n");
     print(" \\___  /   |__|    \\___  >\\___  >_____ \\\\___  >\n");
     print("     \\/                \\/     \\/      \\/    \\/ \n");
-
     print("\033[92mhttps://freezeos.org/\033[0m\n");
     print("\033[93mType 'help' for help on learning commands\033[0m\n\n");
     print("\033[94m--------------------------------\033[0m\n");
     print("\033[92mCurrently: \033[93mVersion 0.64\033[0m\n");
 
-    pci_scan(); 
 
-    shell();
+
+    shell();      
 }
