@@ -54,8 +54,6 @@ void net_poll() {
     }
 }
 
-/* ================= EXISTING E1000 DRIVER ================= */
-
 uint8_t e1000_bus = 0xFF;
 uint8_t e1000_slot = 0xFF;
 volatile uint32_t* e1000_mmio = 0;
@@ -203,7 +201,6 @@ void pci_scan() {
                 print("[NET] Found e1000!\n");
                 e1000_bus = bus;
                 e1000_slot = slot;
-
                 active_net = &e1000_dev;
             }
         }
@@ -237,9 +234,5 @@ void kernel_main(void){
     print("\033[94m--------------------------------\033[0m\n");
     print("\033[92mCurrently: \033[93mVersion 0.64\033[0m\n");
 
-    while (1) {
-        net_poll();
-    }
-
-    shell();      
+    shell();
 }
