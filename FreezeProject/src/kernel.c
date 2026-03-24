@@ -13,7 +13,6 @@ const unsigned int multiboot_header[] = {
 #include "shell.h"
 #include <stdint.h>
 
-
 static inline void outl(uint16_t port, uint32_t val) {
     __asm__ volatile ("outl %0, %1" : : "a"(val), "Nd"(port));
 }
@@ -23,7 +22,6 @@ static inline uint32_t inl(uint16_t port) {
     __asm__ volatile ("inl %1, %0" : "=a"(ret) : "Nd"(port));
     return ret;
 }
-
 
 uint32_t pci_read(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
     uint32_t address = (uint32_t)((bus << 16) | (slot << 11) |
@@ -41,6 +39,22 @@ void pci_write(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t
     outl(0xCFC, value);
 }
 
+struct net_device {
+    const char* name;
+    void (*init)();
+    int (*link_up)();
+    void (*poll)();
+};
+
+struct net_device* active_net = 0;
+
+void net_poll() {
+    if (active_net && active_net->poll) {
+        active_net->poll();
+    }
+}
+
+/* ================= EXISTING E1000 DRIVER ================= */
 
 uint8_t e1000_bus = 0xFF;
 uint8_t e1000_slot = 0xFF;
@@ -80,7 +94,6 @@ int e1000_link_up() {
     uint32_t status = e1000_mmio[E1000_REG_STATUS / 4];
     return (status & (1 << 1)) != 0;
 }
-
 
 void e1000_rx_init() {
     print("[NET] Setting up RX...\n");
@@ -143,6 +156,13 @@ void e1000_init() {
     }
 }
 
+struct net_device e1000_dev = {
+    .name = "e1000",
+    .init = e1000_init,
+    .link_up = e1000_link_up,
+    .poll = e1000_poll
+};
+
 void pci_scan() {
     print("\n[PCI] Scanning...\n");
 
@@ -183,6 +203,8 @@ void pci_scan() {
                 print("[NET] Found e1000!\n");
                 e1000_bus = bus;
                 e1000_slot = slot;
+
+                active_net = &e1000_dev;
             }
         }
     }
@@ -191,9 +213,14 @@ void pci_scan() {
         print("\n[NET] e1000 ready\n");
         e1000_init();
     }
+
+    if (active_net) {
+        print("[NET] Active driver: ");
+        print(active_net->name);
+        print("\n");
+    }
 }
 
-// ENTRY 
 void kernel_main(void){
     clear();
 
@@ -209,6 +236,10 @@ void kernel_main(void){
     print("\033[93mType 'help' for help on learning commands\033[0m\n\n");
     print("\033[94m--------------------------------\033[0m\n");
     print("\033[92mCurrently: \033[93mVersion 0.64\033[0m\n");
+
+    while (1) {
+        net_poll();
+    }
 
     shell();      
 }
