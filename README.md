@@ -1,4 +1,4 @@
-<img width="612" height="408" alt="freezelogo" src="https://github.com/user-attachments/assets/4a98902f-2bc1-4cbb-b313-8a92d6b22fee" />
+<img width="512" height="308" alt="freezelogo" src="https://github.com/user-attachments/assets/4a98902f-2bc1-4cbb-b313-8a92d6b22fee" />
 
 > Operating System from scratch
 
