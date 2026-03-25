@@ -1,4 +1,4 @@
-# Contributing to FreezeOS (The Freeze Project)
+# Contributing to the Freeze Project
 
 Thank you for your interest in contributing to FreezeOS!
 
@@ -95,3 +95,6 @@ If you're unsure about something, open an issue or ask before starting work.
 ---
 
 Thanks for listening, Clash.
+
+<img width="512" height="308" alt="freezelogo" src="https://github.com/user-attachments/assets/4a98902f-2bc1-4cbb-b313-8a92d6b22fee" />
+
